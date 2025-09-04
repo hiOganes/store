@@ -12,5 +12,5 @@ class Product(models.Model):
     name = models.CharField()
     description = models.TextField()
     price = models.DecimalField(max_digits=12, decimal_places=2)
-    stock = models.IntegerField(default=0)
+    stock = models.IntegerField(default=1)
     category = models.CharField(choices=STATUS_CHOICES)

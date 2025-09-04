@@ -16,7 +16,9 @@ STATUS_CHOICES = {
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderItem')
-    total_price = models.DecimalField(max_digits=12, decimal_places=2)
+    total_price = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0
+    )
     status = models.CharField(
         choices=STATUS_CHOICES, default=STATUS_CHOICES['pending']
     )

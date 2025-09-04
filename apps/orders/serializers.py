@@ -1,3 +1,5 @@
+from collections import Counter
+
 from rest_framework import serializers
 
 from apps.products.models import STATUS_CHOICES, Product
@@ -16,24 +18,21 @@ class OrderGetSerializer(serializers.Serializer):
 
 
 class OrderPostSerializer(serializers.Serializer):
-    user = UserSerializer(read_only=True)
     products = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Product.objects.all()
     )
-    total_price = serializers.DecimalField(max_digits=12, decimal_places=2)
-    status = serializers.ChoiceField(choices=STATUS_CHOICES)
-    created_at = serializers.DateTimeField(read_only=True)
 
     def create(self, validated_data):
         user = self.context['request'].user
-        products = validated_data.pop('products')
+        products = Counter(validated_data.pop('products'))
         order = Order.objects.create(user=user, **validated_data)
-        print(products)
-        for product in products:
+        for product, quantity in products.items():
             OrderItem.objects.create(
                 order=order,
                 product=product,
-                quantity=1,
+                quantity=quantity,
                 price_at_purchace=1,
             )
+            order.total_price += product.price
+        order.save()
         return order
