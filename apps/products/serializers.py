@@ -4,9 +4,11 @@ from apps.products.models import STATUS_CHOICES, Product
 
 
 class ProductSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
     description = serializers.CharField()
     price = serializers.DecimalField(max_digits=12, decimal_places=2)
+    stock = serializers.IntegerField()
     category = serializers.ChoiceField(choices=STATUS_CHOICES)
 
     def create(self, validated_data):

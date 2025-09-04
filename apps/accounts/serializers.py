@@ -19,3 +19,8 @@ class RegisterSerialier(serializers.Serializer):
         if not check_password(value):
             raise ValidationError("Short password")
         return value
+
+
+class UserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    email = serializers.EmailField()
