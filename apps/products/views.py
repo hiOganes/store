@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
+from django.shortcuts import get_object_or_404
 
 from apps.products.serializers import ProductSerializer
 from apps.products.models import Product
@@ -53,74 +54,45 @@ class ProductDetailAPIView(APIView):
     paginations_class = CustomPagination
     permission_classes = [IsAuthenticatedOrReadOnly | IsAdminUser]
 
-    def get_object(self, pk, *args, **kwargs):
-        try:
-            product = self.model.objects.get(pk=pk)
-            return product
-        except self.model.DoesNotExist:
-            return None
-
     @extend_schema(**schema_examples.product_detail_get_schema)
     def get(self, request, pk, *args, **kwargs):
-        product = self.get_object(pk)
-        if product:
-            serializer = self.serializer_class(product)
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
-        return Response(
-            data={'detail': 'Object does not exist'},
-            status=status.HTTP_404_NOT_FOUND
-        )
-
+        product = get_object_or_404(self.model, pk=pk)
+        serializer = self.serializer_class(product)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(**schema_examples.product_detail_put_schema)
     def put(self, request, pk, *args, **kwargs):
-        product = self.get_object(pk)
-        if product:
-            serializer = self.serializer_class(product, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(
-                    data=serializer.data, status=status.HTTP_200_OK
-                )
+        product = get_object_or_404(self.model, pk=pk)
+        serializer = self.serializer_class(product, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
             return Response(
-                data=serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                data=serializer.data, status=status.HTTP_200_OK
             )
         return Response(
-            data={'detail': 'Object does not exist'},
-            status=status.HTTP_404_NOT_FOUND
+            data=serializer.errors, status=status.HTTP_400_BAD_REQUEST
         )
 
     @extend_schema(**schema_examples.product_detail_patch_schema)
     def patch(self, request, pk, *args, **kwargs):
-        product = self.get_object(pk)
-        if product:
-            serializer = self.serializer_class(
-                product, data=request.data, partial=True
-            )
-            if serializer.is_valid():
-                serializer.save()
-                return Response(
-                    data=serializer.data, status=status.HTTP_200_OK
-                )
+        product = get_object_or_404(self.model, pk=pk)
+        serializer = self.serializer_class(
+            product, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
             return Response(
-                data=serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                data=serializer.data, status=status.HTTP_200_OK
             )
         return Response(
-            data={'detail': 'Object does not exist'},
-            status=status.HTTP_404_NOT_FOUND
+            data=serializer.errors, status=status.HTTP_400_BAD_REQUEST
         )
-
 
     @extend_schema(**schema_examples.product_detail_delete_schema)
     def delete(self, request, pk, *args, **kwargs):
-        product = self.get_object(pk)
-        if product:
-            product.delete()
-            return Response(
-                data={'message': 'Item is deleted'},
-                status=status.HTTP_204_NO_CONTENT
-            )
+        product = get_object_or_404(self.model, pk=pk)
+        product.delete()
         return Response(
-            data={'detail': 'Object does not exist'},
-            status=status.HTTP_404_NOT_FOUND
-        )
+             data={'message': 'Item is deleted'},
+             status=status.HTTP_204_NO_CONTENT
+         )

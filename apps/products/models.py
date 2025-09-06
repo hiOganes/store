@@ -1,7 +1,7 @@
 from django.db import models
 
 
-STATUS_CHOICES = {
+CATEGORY_CHOICES = {
     'electronics': 'Electronics',
     'clothing': 'Clothing',
     'books': 'Books',
@@ -13,4 +13,4 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=12, decimal_places=2)
     stock = models.IntegerField(default=1)
-    category = models.CharField(choices=STATUS_CHOICES)
+    category = models.CharField(choices=CATEGORY_CHOICES)

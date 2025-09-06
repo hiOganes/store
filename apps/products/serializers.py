@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.products.models import STATUS_CHOICES, Product
+from apps.products.models import CATEGORY_CHOICES, Product
 
 
 class ProductSerializer(serializers.Serializer):
@@ -9,7 +9,7 @@ class ProductSerializer(serializers.Serializer):
     description = serializers.CharField()
     price = serializers.DecimalField(max_digits=12, decimal_places=2)
     stock = serializers.IntegerField()
-    category = serializers.ChoiceField(choices=STATUS_CHOICES)
+    category = serializers.ChoiceField(choices=CATEGORY_CHOICES)
 
     def create(self, validated_data):
         return Product.objects.create(**validated_data)

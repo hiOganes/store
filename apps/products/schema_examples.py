@@ -1,7 +1,7 @@
 from drf_spectacular.utils import OpenApiParameter, OpenApiTypes
 
 from apps.products.serializers import ProductSerializer
-from apps.products.models import STATUS_CHOICES
+from apps.products.models import CATEGORY_CHOICES
 
 
 products_tags = ['Products']
@@ -17,7 +17,7 @@ product_list_get_schema = {
             description="Filter products by category",
             required=False,
             type=OpenApiTypes.STR,
-            enum=STATUS_CHOICES
+            enum=CATEGORY_CHOICES
         ),
         OpenApiParameter(
             name="min_price",
