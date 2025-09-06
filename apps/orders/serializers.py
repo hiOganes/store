@@ -3,10 +3,10 @@ from collections import Counter
 from rest_framework import serializers
 from django.db import transaction
 
-from apps.products.models import STATUS_CHOICES, Product
+from apps.products.models import Product
 from apps.products.serializers import ProductSerializer
 from apps.accounts.serializers import UserSerializer
-from apps.orders.models import OrderItem, Order
+from apps.orders.models import OrderItem, Order, STATUS_CHOICES
 
 
 class OrderGetSerializer(serializers.Serializer):
@@ -31,7 +31,9 @@ class OrderPostSerializer(serializers.Serializer):
             for product, quantity in products.items():
                 if product.stock < quantity:
                     raise serializers.ValidationError(
-                        'Not enough products', code=400
+                        f'Quantity specified is too large. '
+                        f'Ordered: {quantity}, Remaining: {product.stock}',
+                        code=400
                     )
                 OrderItem.objects.create(
                     order=order,
@@ -44,3 +46,13 @@ class OrderPostSerializer(serializers.Serializer):
                 order.total_price += product.price
             order.save()
         return order
+
+
+class OrderPatchSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=STATUS_CHOICES)
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
