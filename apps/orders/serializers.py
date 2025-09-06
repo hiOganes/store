@@ -1,6 +1,7 @@
 from collections import Counter
 
 from rest_framework import serializers
+from django.db import transaction
 
 from apps.products.models import STATUS_CHOICES, Product
 from apps.products.serializers import ProductSerializer
@@ -23,16 +24,23 @@ class OrderPostSerializer(serializers.Serializer):
     )
 
     def create(self, validated_data):
-        user = self.context['request'].user
-        products = Counter(validated_data.pop('products'))
-        order = Order.objects.create(user=user, **validated_data)
-        for product, quantity in products.items():
-            OrderItem.objects.create(
-                order=order,
-                product=product,
-                quantity=quantity,
-                price_at_purchace=1,
-            )
-            order.total_price += product.price
-        order.save()
+        with transaction.atomic():
+            user = self.context['request'].user
+            products = Counter(validated_data.pop('products'))
+            order = Order.objects.create(user=user, **validated_data)
+            for product, quantity in products.items():
+                if product.stock < quantity:
+                    raise serializers.ValidationError(
+                        'Not enough products', code=400
+                    )
+                OrderItem.objects.create(
+                    order=order,
+                    product=product,
+                    quantity=quantity,
+                    price_at_purchace=product.price,
+                )
+                product.stock -= quantity
+                product.save()
+                order.total_price += product.price
+            order.save()
         return order
