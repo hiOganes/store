@@ -1,12 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 
-from apps.orders.models import Order, OrderItem
+from apps.orders.models import Order
 from apps.orders import schema_examples
+from apps.orders.tasks import get_order_report
 from apps.orders.serializers import (
     OrderGetSerializer,
     OrderPostSerializer,
@@ -31,6 +32,8 @@ class OrderListAPIView(APIView):
         )
         if serializer.is_valid():
             serializer.save()
+            products = []
+            get_order_report.delay([product.id for product in serializer.validated_data['products']])
             return Response(
                 data=serializer.data, status=status.HTTP_201_CREATED
             )
