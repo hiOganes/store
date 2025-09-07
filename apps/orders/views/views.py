@@ -21,7 +21,6 @@ class OrderListAPIView(APIView):
     @extend_schema(**schema_examples.orders_list_get_schema)
     def get(self, request, *args, **kwargs):
         orders = self.model.objects.filter(user_id=request.user.id)
-        print(orders)
         serializer = OrderGetSerializer(orders, many=True)
         return Response(data=serializer.data)
 
@@ -43,17 +42,28 @@ class OrderListAPIView(APIView):
 class OrderDetailAPIView(APIView):
     model = Order
     serializer_class = OrderGetSerializer
-    permission_classes = [IsAuthenticated | IsAdminUser]
+    permission_classes = [IsAuthenticated]
+
+    def check_perimssion(self, request, order):
+        return request.user.id == order.user_id or request.user.is_staff
 
     @extend_schema(**schema_examples.orders_detail_get_schema)
     def get(self, request, pk, *args, **kwargs):
         order = get_object_or_404(self.model, pk=pk)
+        if not self.check_perimssion(request, order):
+            return Response(
+                data='Access denied', status=status.HTTP_403_FORBIDDEN
+            )
         serializer = self.serializer_class(order)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(**schema_examples.orders_detail_patch_schema)
     def patch(self, request, pk, *args, **kwargs):
         order = get_object_or_404(self.model, pk=pk)
+        if not self.check_perimssion(request, order):
+            return Response(
+                data='Access denied', status=status.HTTP_403_FORBIDDEN
+            )
         serializer = OrderPatchSerializer(
             order, data=request.data, partial=True
         )

@@ -8,9 +8,11 @@ from apps.accounts.views import (
 )
 
 
+app_name = 'accounts'
+
 urlpatterns = [
-    path('register/', RegisterAPIView.as_view(), name='account-register'),
-    path('login/', CustomTokenObtainPairView.as_view(), name='account-login'),
-    path('refresh/', CustomTokenRefreshView.as_view(), name='account-refresh'),
-    path('verify/', CustomTokenVerifyView.as_view(), name='account-verify'),
+    path('register/', RegisterAPIView.as_view(), name='register'),
+    path('login/', CustomTokenObtainPairView.as_view(), name='login'),
+    path('refresh/', CustomTokenRefreshView.as_view(), name='refresh'),
+    path('verify/', CustomTokenVerifyView.as_view(), name='verify'),
 ]

@@ -27,9 +27,13 @@ from drf_spectacular.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Api
-    path('api/auth/', include('apps.accounts.urls')),
-    path('api/products/', include('apps.products.urls')),
-    path('api/orders/', include('apps.orders.urls')),
+    path('api/auth/', include('apps.accounts.urls', namespace='accounts')),
+    path('api/products/', include('apps.products.urls', namespace='products')),
+    path('api/orders/', include('apps.orders.urls.urls', namespace='orders')),
+    path(
+        'api/admin/orders/',
+        include('apps.orders.urls.admin_urls', namespace='admin-orders')
+    ),
     # Doc
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/',
