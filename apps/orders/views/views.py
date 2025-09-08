@@ -32,8 +32,13 @@ class OrderListAPIView(APIView):
         )
         if serializer.is_valid():
             serializer.save()
-            products = []
-            get_order_report.delay([product.id for product in serializer.validated_data['products']])
+            products_ids = []
+
+            for product in serializer.validated_data['products']:
+                print(product.id)
+                products_ids.append(product.id)
+
+            get_order_report.delay(products_ids)
             return Response(
                 data=serializer.data, status=status.HTTP_201_CREATED
             )

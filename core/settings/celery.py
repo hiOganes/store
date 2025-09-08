@@ -1,5 +1,4 @@
 CELERY = {
-    'timezone': 'Europe/Moscow',
     'task_track_started': True,
     'result_backend': 'django-db',
     'result_extended': True,

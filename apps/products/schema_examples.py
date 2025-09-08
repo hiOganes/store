@@ -38,8 +38,8 @@ product_list_get_schema = {
 product_list_post_schema = {
     'tags': products_tags,
     'summary': 'This endpoint creates a new product',
-    'description': '''If you provide the correct data, you can create a new 
-        product. This can only be done by an administrator.''',
+    'description': f'Select category: '
+                   f'{list(CATEGORY_CHOICES.keys())}',
     'responses': {201: ProductSerializer},
 }
 
