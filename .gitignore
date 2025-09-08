@@ -7,3 +7,5 @@
 .env
 
 db.sqlite3
+
+**/orders_reports
