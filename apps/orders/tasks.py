@@ -1,5 +1,6 @@
 import os
 
+import requests
 from celery import shared_task
 from reportlab.platypus import SimpleDocTemplate, Table
 from django.utils import timezone
@@ -51,3 +52,11 @@ def simulation_sending_email(path_to_file):
     email.send()
 
     return 'email sending'
+
+
+@shared_task(max_retries=3)
+def external_api_simulation():
+    external_url = 'https://jsonplaceholder.typicode.com/'
+    response = requests.get(external_url)
+    print(response.status_code)
+    return 'Success request'
