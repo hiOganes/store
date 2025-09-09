@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from django.core.cache import cache
 
 from apps.orders.models import Order
 from apps.orders import schema_examples
@@ -13,6 +14,7 @@ from apps.orders.serializers import (
     OrderPostSerializer,
     OrderPatchSerializer
 )
+from apps.accounts.models import User
 
 
 class OrderListAPIView(APIView):
@@ -52,18 +54,27 @@ class OrderDetailAPIView(APIView):
     serializer_class = OrderGetSerializer
     permission_classes = [IsAuthenticated]
 
-    def check_perimssion(self, request, order):
-        return request.user.id == order.user_id or request.user.is_staff
+    def check_perimssion(self, request, user_id):
+        return request.user.id == user_id or request.user.is_staff
 
     @extend_schema(**schema_examples.orders_detail_get_schema)
     def get(self, request, pk, *args, **kwargs):
-        order = get_object_or_404(self.model, pk=pk)
-        if not self.check_perimssion(request, order):
+        cache_key = request.get_full_path()
+        cached_data = cache.get(cache_key)
+        if not cached_data:
+            order = get_object_or_404(self.model, pk=pk)
+            if not self.check_perimssion(request, order.user_id):
+                return Response(
+                    data='Access denied', status=status.HTTP_403_FORBIDDEN
+                )
+            serializer = self.serializer_class(order)
+            cached_data = serializer.data
+            cache.set(cache_key, cached_data, 5)
+        if not self.check_perimssion(request, cached_data['user']['id']):
             return Response(
                 data='Access denied', status=status.HTTP_403_FORBIDDEN
             )
-        serializer = self.serializer_class(order)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(data=cached_data, status=status.HTTP_200_OK)
 
     @extend_schema(**schema_examples.orders_detail_patch_schema)
     def patch(self, request, pk, *args, **kwargs):

@@ -4,6 +4,9 @@ from rest_framework import status
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from django.core.cache import cache
+from django.urls import reverse
 
 from apps.products.serializers import ProductSerializer
 from apps.products.models import Product
@@ -19,17 +22,21 @@ class ProductListAPIView(APIView):
 
     @extend_schema(**schema_examples.product_list_get_schema)
     def get(self, request, *args, **kwargs):
-        category = request.query_params.get('category', '')
+        category = request.query_params.get('category')
         min_price = request.query_params.get('min_price', 0)
         max_price = request.query_params.get('max_price')
-        products = self.model.objects.filter(
-            category__icontains=category,
-            price__gte=min_price,
-        )
+        products = self.model.objects.filter(price__gte=min_price)
         if max_price:
             products = products.filter(price__lte=max_price)
+        if category:
+            products = products.filter(category__iexact=category)
+        cache_key = request.get_full_path()
+        if not cache.get(cache_key):
+            cache.set(cache_key, products, 60)
         paginator = self.paginations_class()
-        paginated_queryset = paginator.paginate_queryset(products, request)
+        paginated_queryset = paginator.paginate_queryset(
+            cache.get(cache_key), request
+        )
         serializer = self.serializer_class(paginated_queryset, many=True)
         return paginator.get_paginated_response(serializer.data)
 
