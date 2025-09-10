@@ -2,9 +2,9 @@ from django.db import models
 
 
 CATEGORY_CHOICES = {
-    'electronics': 'Electronics',
-    'clothing': 'Clothing',
-    'books': 'Books',
+    'electronics': 'electronics',
+    'clothing': 'clothing',
+    'books': 'books',
 }
 
 

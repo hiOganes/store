@@ -19,6 +19,8 @@ orders_list_get_schema = {
 orders_list_post_schema = {
     'tags': orders_tags,
     'summary': 'This endpoint creates a new order',
+    'description': '''This point accepts product IDs to create an order, 
+        for example: {"products": [1, 2, 3]}''',
     'request': OrderPostSerializer,
     'responses': {201: OrderPostSerializer},
 }

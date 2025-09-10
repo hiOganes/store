@@ -5,11 +5,11 @@ from apps.accounts.models import User
 
 
 STATUS_CHOICES = {
-    'pending': 'Pending',
-    'processing': 'Processing',
-    'shipped': 'Shipped',
-    'delivered': 'Delivered',
-    'cancelled': 'Cancelled',
+    'pending': 'pending',
+    'processing': 'processing',
+    'shipped': 'shipped',
+    'delivered': 'delivered',
+    'cancelled': 'cancelled',
 }
 
 

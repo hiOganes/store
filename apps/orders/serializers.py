@@ -2,6 +2,7 @@ from collections import Counter
 
 from rest_framework import serializers
 from django.db import transaction
+from django.core.exceptions import ValidationError
 
 from apps.products.models import Product
 from apps.products.serializers import ProductSerializer

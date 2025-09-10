@@ -12,12 +12,12 @@ class RegisterSerialier(serializers.Serializer):
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
-            raise ValidationError("Email exists")
+            raise ValidationError("Email exists", code=400)
         return value
 
     def validate_password(self, value):
         if not check_password(value):
-            raise ValidationError("Short password")
+            raise ValidationError("Short password", code=400)
         return value
 
 

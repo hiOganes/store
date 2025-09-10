@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.core.exceptions import ValidationError
 
 from apps.products.models import CATEGORY_CHOICES, Product
 
@@ -19,3 +20,13 @@ class ProductSerializer(serializers.Serializer):
             setattr(instance, attr, value)
         instance.save()
         return instance
+
+    def validate_price(self, value):
+        if value <= 0:
+            raise ValidationError('Incorrect price', code=400)
+        return value
+
+    def validate_stock(self, value):
+        if value <= 0:
+            raise ValidationError('Incorrect stock', code=400)
+        return value
