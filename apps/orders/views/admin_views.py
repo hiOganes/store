@@ -12,6 +12,7 @@ from apps.orders.serializers import OrderGetSerializer
 class AdminOrderListAPIView(APIView):
     model = Order
     permission_classes = [IsAdminUser]
+    serializer_class = OrderGetSerializer
 
     @extend_schema(**schema_examples.admin_orders_list_get_schema)
     def get(self, request, *args, **kwargs):
@@ -23,5 +24,5 @@ class AdminOrderListAPIView(APIView):
             orders = self.model.objects.filter(status__iexact=status_order)
         if not user_id and not status_order:
             orders = self.model.objects.all()
-        serializer = OrderGetSerializer(orders, many=True)
+        serializer = self.serializer_class(orders, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)

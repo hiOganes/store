@@ -11,6 +11,12 @@ test_admin_user_register = {
     'is_staff': True,
 }
 
+test_other_user_register = {
+    'username': 'Otheruser',
+    'email': 'other@user.com',
+    'password': 'otherpass',
+}
+
 test_user_login = {
     'email': 'test@test.com',
     'password': '12345',

@@ -48,6 +48,11 @@ class OrderPostSerializer(serializers.Serializer):
             order.save()
         return order
 
+    def validate_products(self, value):
+        if not value:
+            raise ValidationError('Empty list', code=400)
+        return value
+
 
 class OrderPatchSerializer(serializers.Serializer):
     status = serializers.ChoiceField(choices=STATUS_CHOICES)

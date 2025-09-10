@@ -79,7 +79,7 @@ class OrderDetailAPIView(APIView):
     @extend_schema(**schema_examples.orders_detail_patch_schema)
     def patch(self, request, pk, *args, **kwargs):
         order = get_object_or_404(self.model, pk=pk)
-        if not self.check_perimssion(request, order):
+        if not self.check_perimssion(request, order.user_id):
             return Response(
                 data='Access denied', status=status.HTTP_403_FORBIDDEN
             )
