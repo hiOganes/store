@@ -7,7 +7,7 @@ from rest_framework import status
 from apps.accounts.models import User
 from apps.products.models import Product
 from apps.products.serializers import ProductSerializer
-from apps.products.views import ProductDetailAPIView
+from apps.products.views import ProductDetailAPIView, ProductListAPIView
 from apps.common.data_tests import (
     test_user_register,
     test_admin_user_register,
@@ -16,63 +16,63 @@ from apps.common.data_tests import (
 )
 
 
-# class TestProductListAPIView(APITestCase):
-#     def setUp(self):
-#         self.url = reverse('products:list')
-#         self.factory = APIRequestFactory()
-#         self.view = ProductListAPIView.as_view()
-#         self.user = User.objects.create_user(**test_user_register)
-#         self.admin = User.objects.create_user(**test_admin_user_register)
-#         self.product = Product.objects.create(**test_products)
-#         self.products = Product.objects.all()
-#
-#     def test_get_products_authenticated_user(self):
-#         request = self.factory.get(self.url)
-#         force_authenticate(request, user=self.user)
-#         response = self.view(request)
-#         serializer = ProductSerializer(self.products, many=True)
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#
-#     def test_get_products_authenticated_admin(self):
-#         request = self.factory.get(self.url)
-#         force_authenticate(request, user=self.admin)
-#         response = self.view(request)
-#         serializer = ProductSerializer(self.products, many=True)
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#
-#     def test_get_products_unauthenticated(self):
-#         request = self.factory.get(self.url)
-#         response = self.view(request)
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#
-#     def test_post_products_valid_data(self):
-#         other_product = {
-#             'name': 'Test2',
-#             'description': 'Test two',
-#             'price': 2,
-#             'stock': 10,
-#             'category': 'books'
-#         }
-#         request = self.factory.post(self.url, other_product, format='json')
-#         force_authenticate(request, user=self.admin)
-#         response = self.view(request)
-#         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-#         self.assertTrue(
-#             Product.objects.filter(name=test_products['name']).exists()
-#         )
-#
-#     def test_post_products_invalid_data(self):
-#         invalid_data = {
-#             'name': 'Test_invalid_data',
-#             'description': 'Test_invalid_data',
-#             'price': 'one',
-#             'stock': 'five',
-#             'category': 'invalid_category'
-#         }
-#         request = self.factory.post(self.url, invalid_data, format='json')
-#         force_authenticate(request, user=self.admin)
-#         response = self.view(request)
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+class TestProductListAPIView(APITestCase):
+    def setUp(self):
+        self.url = reverse('products:list')
+        self.factory = APIRequestFactory()
+        self.view = ProductListAPIView.as_view()
+        self.user = User.objects.create_user(**test_user_register)
+        self.admin = User.objects.create_user(**test_admin_user_register)
+        self.product = Product.objects.create(**test_products)
+        self.products = Product.objects.all()
+
+    def test_get_products_authenticated_user(self):
+        request = self.factory.get(self.url)
+        force_authenticate(request, user=self.user)
+        response = self.view(request)
+        serializer = ProductSerializer(self.products, many=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_products_authenticated_admin(self):
+        request = self.factory.get(self.url)
+        force_authenticate(request, user=self.admin)
+        response = self.view(request)
+        serializer = ProductSerializer(self.products, many=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_products_unauthenticated(self):
+        request = self.factory.get(self.url)
+        response = self.view(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_post_products_valid_data(self):
+        other_product = {
+            'name': 'Test2',
+            'description': 'Test two',
+            'price': 2,
+            'stock': 10,
+            'category': 'books'
+        }
+        request = self.factory.post(self.url, other_product, format='json')
+        force_authenticate(request, user=self.admin)
+        response = self.view(request)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(
+            Product.objects.filter(name=test_products['name']).exists()
+        )
+
+    def test_post_products_invalid_data(self):
+        invalid_data = {
+            'name': 'Test_invalid_data',
+            'description': 'Test_invalid_data',
+            'price': 'one',
+            'stock': 'five',
+            'category': 'invalid_category'
+        }
+        request = self.factory.post(self.url, invalid_data, format='json')
+        force_authenticate(request, user=self.admin)
+        response = self.view(request)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class TestProductDetailAPIView(APITestCase):
