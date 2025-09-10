@@ -32,22 +32,21 @@ test_user_login_ivalid_data = {
     'password': '12345',
 }
 
-test_products = [
-    {
-        'name': 'Test',
-        'description': 'Test description',
-        'price': 1,
-        'stock': 5,
-        'category': 'electronics'
-    },
-    {
-        'name': 'Test',
-        'description': 'Test description',
-        'price': 1,
-        'stock': 5,
-        'category': 'electronics'
-    },
-]
+test_products = {
+        "name": "Test",
+        "description": "Test description",
+        "price": 1,
+        "stock": 5,
+        "category": "electronics"
+    }
+
+test_products2 = {
+        "name": "Test2",
+        "description": "Test description2",
+        "price": 2,
+        "stock": 5,
+        "category": "books"
+    }
 
 test_order = {
   'products': [

@@ -12,6 +12,7 @@ from apps.products.serializers import ProductSerializer
 from apps.products.models import Product
 from apps.products import schema_examples
 from apps.common.paginations import CustomPagination
+from apps.common.permissions import IsAdminOrReadOnly
 
 
 class ProductListAPIView(APIView):
@@ -59,7 +60,7 @@ class ProductDetailAPIView(APIView):
     serializer_class = ProductSerializer
     model = Product
     paginations_class = CustomPagination
-    permission_classes = [IsAuthenticatedOrReadOnly | IsAdminUser]
+    permission_classes = [IsAdminOrReadOnly]
 
     @extend_schema(**schema_examples.product_detail_get_schema)
     def get(self, request, pk, *args, **kwargs):
