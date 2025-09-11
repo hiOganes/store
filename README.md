@@ -1,7 +1,6 @@
 # StoreAPI
 
 #### Основные функции:
-
 #### Технологии и решения:
 
 1.Example
@@ -12,6 +11,7 @@
 - [Installation and start project](#installation-and-start-project)
 - [Running the Project](#running-the-project)
 - [Testing](#testing)
+- [Screenshots](#screenshots)
 
 ## Technologies
 
@@ -24,7 +24,7 @@
 
 1. Clone the repository
     ```
-    git@github.com:hiOganes/store.git
+    git clone git@github.com:hiOganes/store.git
     ```
 
 2. In the terminal, at the docker-compose.yaml file level, run the command:
@@ -54,11 +54,12 @@
 
 ## Testing
 
-   ```
+ ```
  python manage.py test .
-   ```
+ ```
 
-### Скриншоты Celery
+### Screenshots 
+### Celery
 #### Flower
 ![celery_flower](https://raw.githubusercontent.com/hiOganes/store/main/screenshots/celery_flower.png)
 ![celery_flower_tasks](https://raw.githubusercontent.com/hiOganes/store/main/screenshots/celery_flower_tasks.png)
@@ -69,7 +70,7 @@
 #### Admin
 ![celery_admin](https://raw.githubusercontent.com/hiOganes/store/main/screenshots/celery_admin.png)
 
-### Скриншоты Memcached
+### Memcached
 
 <p align="center">
  <img width="1000px" src="https://raw.githubusercontent.com/hiOganes/store/main/screenshots/memcache.png" alt="qr"/>
