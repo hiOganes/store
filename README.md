@@ -19,6 +19,7 @@
 - Django 5.2.5
 - PostgreSQL 17.0
 - Redis 8.2
+- Memcached 1.6.24
 
 ## Installation and start project
 
