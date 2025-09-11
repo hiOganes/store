@@ -1,6 +1,13 @@
+import os
+
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 CELERY = {
     'task_track_started': True,
     'result_backend': 'django-db',
     'result_extended': True,
-    'broker_url': 'redis://localhost:6379/1',
+    'broker_url': os.getenv("ENV_BROKER_URL"),
 }

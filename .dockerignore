@@ -1,0 +1,11 @@
+.venv/
+
+.idea/
+
+**/__pycache__/
+
+.env
+
+db.sqlite3
+
+**/orders_reports

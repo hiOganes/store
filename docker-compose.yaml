@@ -1,0 +1,62 @@
+services:
+  db:
+    image: "postgres:17"
+    environment:
+      POSTGRES_USER: "store_user"
+      POSTGRES_PASSWORD: "1234"
+      POSTGRES_DB: "store_db"
+    networks:
+      - net_store
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql
+
+  cache:
+    image: "memcached:1.6-alpine"
+    networks:
+      - net_store
+    ports:
+      - "11212:11211"
+    volumes:
+      - cache_data:/var/lib/memcached
+    env_file:
+      - .docker.env
+
+  broker:
+    image: "redis:8.2"
+    networks:
+      - net_store
+    ports:
+      - "6380:6379"
+    volumes:
+      - broker_data:/var/lib/redis
+    env_file:
+      - .docker.env
+
+  web:
+    build: .
+    image: store-web:1
+    ports:
+      - "8001:8000"
+    networks:
+      - net_store
+    depends_on:
+      - db
+      - cache
+      - broker
+    env_file:
+      - .docker.env
+    volumes:
+      - web_store_data:/var/lib/web_store
+
+
+networks:
+  net_store:
+    driver: bridge
+
+volumes:
+  db_data:
+  cache_data:
+  broker_data:
+  web_store_data:
