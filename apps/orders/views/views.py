@@ -14,7 +14,6 @@ from apps.orders.serializers import (
     OrderPostSerializer,
     OrderPatchSerializer
 )
-from apps.accounts.models import User
 
 
 class OrderListAPIView(APIView):

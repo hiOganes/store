@@ -13,7 +13,7 @@ services:
       - db_data:/var/lib/postgresql
 
   cache:
-    image: "memcached:1.6-alpine"
+    image: "memcached:1.6"
     networks:
       - net_store
     ports:
@@ -53,6 +53,8 @@ services:
   celery-worker:
     build: .
     image: store-web:1
+    ports:
+      - "5556:5555"
     command:
       - celery
       - -A
