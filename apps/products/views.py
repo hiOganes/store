@@ -33,7 +33,7 @@ class ProductListAPIView(APIView):
             products = products.filter(category__iexact=category)
         cache_key = request.get_full_path()
         if not cache.get(cache_key):
-            cache.set(cache_key, products, 60)
+            cache.set(cache_key, products, 60 * 5)
         paginator = self.paginations_class()
         paginated_queryset = paginator.paginate_queryset(
             cache.get(cache_key), request

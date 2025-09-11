@@ -68,7 +68,7 @@ class OrderDetailAPIView(APIView):
                 )
             serializer = self.serializer_class(order)
             cached_data = serializer.data
-            cache.set(cache_key, cached_data, 5)
+            cache.set(cache_key, cached_data, 60)
         if not self.check_perimssion(request, cached_data['user']['id']):
             return Response(
                 data='Access denied', status=status.HTTP_403_FORBIDDEN

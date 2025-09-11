@@ -50,6 +50,25 @@ services:
     volumes:
       - web_store_data:/var/lib/web_store
 
+  celery-worker:
+    build: .
+    image: store-web:1
+    command:
+      - celery
+      - -A
+      - core
+      - worker
+      - --loglevel=INFO
+    depends_on:
+      - db
+      - broker
+    networks:
+      - net_store
+    env_file:
+      - .docker.env
+    volumes:
+      - web_store_data:/var/lib/web_store
+
 
 networks:
   net_store:
