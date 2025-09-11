@@ -1,1 +1,7 @@
-![Image alt](https://github.com/{username}/{repository}/raw/{branch}/{path}/image.png)
+Скриншоты Celery
+
+![Image alt](https://github.com/hiOganes/store/blob/main/screenshots/celery_flower.png)
+
+Скриншоты Memcached
+
+![Image alt](https://github.com/hiOganes/store/blob/main/screenshots/memcache.png)
