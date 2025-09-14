@@ -8,7 +8,7 @@ from django.core.cache import cache
 
 from apps.orders.models import Order
 from apps.orders import schema_examples
-from apps.orders.tasks import get_order_report, external_api_simulation
+from apps.orders.tasks import get_order_report, request_api_simulation
 from apps.orders.serializers import (
     OrderGetSerializer,
     OrderPostSerializer,
@@ -87,7 +87,7 @@ class OrderDetailAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             if serializer.validated_data['status'] == 'shipped':
-                external_api_simulation.delay()
+                request_api_simulation.delay()
             return Response(
                 data=serializer.data, status=status.HTTP_200_OK
             )

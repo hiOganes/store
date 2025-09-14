@@ -1,6 +1,7 @@
 import os
 
 import requests
+from requests.exceptions import RequestException
 from celery import shared_task
 from reportlab.platypus import SimpleDocTemplate, Table
 from django.utils import timezone
@@ -54,8 +55,11 @@ def simulation_sending_email(path_to_file):
     return 'email sending'
 
 
-@shared_task(max_retries=3)
-def external_api_simulation():
-    external_url = 'https://jsonplaceholder.typicode.com/'
-    response = requests.get(external_url)
+@shared_task(
+    max_retries=3, default_retry_delay=60, autoretry_for=(RequestException,)
+)
+def request_api_simulation():
+    external_endpoint = 'https://jsonplaceholder.typicode.com/postsq/'
+    response = requests.get(external_endpoint)
+    response.raise_for_status()
     return 'Success request'
