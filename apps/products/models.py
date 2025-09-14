@@ -9,11 +9,16 @@ CATEGORY_CHOICES = {
 
 
 class Product(models.Model):
-    name = models.CharField()
+    name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=12, decimal_places=2)
-    stock = models.IntegerField(default=1)
+    stock = models.PositiveIntegerField(default=1)
     category = models.CharField(choices=CATEGORY_CHOICES)
 
     class Meta:
         ordering = ['category']
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
+
+    def __str__(self):
+        return self.name

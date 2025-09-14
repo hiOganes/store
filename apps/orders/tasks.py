@@ -58,5 +58,4 @@ def simulation_sending_email(path_to_file):
 def external_api_simulation():
     external_url = 'https://jsonplaceholder.typicode.com/'
     response = requests.get(external_url)
-    print(response.status_code)
     return 'Success request'
