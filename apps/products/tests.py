@@ -1,7 +1,9 @@
 from copy import deepcopy
 
 from django.urls import reverse
-from rest_framework.test import APIRequestFactory, force_authenticate, APITestCase
+from rest_framework.test import (
+    APIRequestFactory, force_authenticate, APITestCase
+)
 from rest_framework import status
 from django.core.cache import cache
 

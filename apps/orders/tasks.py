@@ -59,7 +59,7 @@ def simulation_sending_email(path_to_file):
     max_retries=3, default_retry_delay=60, autoretry_for=(RequestException,)
 )
 def request_api_simulation():
-    external_endpoint = 'https://jsonplaceholder.typicode.com/postsq/'
+    external_endpoint = 'https://jsonplaceholder.typicode.com/posts/'
     response = requests.get(external_endpoint)
     response.raise_for_status()
     return 'Success request'

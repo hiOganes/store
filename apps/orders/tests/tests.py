@@ -1,7 +1,9 @@
 from django.urls import reverse
-from rest_framework.test import APIRequestFactory, force_authenticate, APITestCase
 from rest_framework import status
 from django.core.cache import cache
+from rest_framework.test import (
+    APIRequestFactory, force_authenticate, APITestCase
+)
 
 from apps.orders.models import Order
 from apps.accounts.models import User

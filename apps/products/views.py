@@ -4,9 +4,7 @@ from rest_framework import status
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from django.shortcuts import get_object_or_404
-from django.utils.decorators import method_decorator
 from django.core.cache import cache
-from django.urls import reverse
 
 from apps.products.serializers import ProductSerializer
 from apps.products.models import Product
