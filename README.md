@@ -37,21 +37,22 @@
     ```
     docker compose exec web bash
     ```
+### inside the container / bash
 
-4. Apply migrations:
+1. Apply migrations:
     ```
     python manage.py migrate
     ```
 
-5. Create a superuser:
+2. Create a superuser:
     ```
     python manage.py createsuperuser
     ```
 
 ## Running the Project
 
-1. Open your browser and go to [OpenAPI](http://0.0.0.0:8001/api/schema/swagger-ui/)
-2. Open your browser and go to [ReDoc](http://0.0.0.0:8001/api/schema/redoc/)
+1. Open your browser and go to [OpenAPI](http://127.0.0.1:8001/api/schema/swagger-ui/)
+2. Open your browser and go to [ReDoc](http://127.0.0.1:8001/api/schema/redoc/)
 
 ## Testing
 

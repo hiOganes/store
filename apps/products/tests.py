@@ -3,6 +3,7 @@ from copy import deepcopy
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory, force_authenticate, APITestCase
 from rest_framework import status
+from django.core.cache import cache
 
 from apps.accounts.models import User
 from apps.products.models import Product
@@ -44,6 +45,23 @@ class TestProductListAPIView(APITestCase):
         request = self.factory.get(self.url)
         response = self.view(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_products_cahed_hit(self):
+        request = self.factory.get(self.url)
+        force_authenticate(request, user=self.admin)
+        response = self.view(request)
+        self.assertIsNotNone(cache.get(request.get_full_path()))
+        with self.assertNumQueries(0):
+            response = self.view(request)
+
+    def test_get_products_cahed_miss(self):
+        request = self.factory.get(self.url)
+        force_authenticate(request, user=self.admin)
+        cached_data = cache.get(self.url)
+        self.assertIsNone(cached_data)
+        with self.assertNumQueries(1):
+            response = self.view(request)
+
 
     def test_post_products_valid_data(self):
         other_product = {

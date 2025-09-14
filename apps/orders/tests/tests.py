@@ -1,6 +1,7 @@
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory, force_authenticate, APITestCase
 from rest_framework import status
+from django.core.cache import cache
 
 from apps.orders.models import Order
 from apps.accounts.models import User
@@ -102,6 +103,29 @@ class TestOrderDetailAPIView(APITestCase):
         )
         response = self.view(request, pk=self.order.pk)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_get_orders_cahed_hit(self):
+        request = self.factory.get(
+            reverse('orders:detail', kwargs={'pk': self.order.pk})
+        )
+        force_authenticate(request, user=self.admin)
+        response = self.view(request, pk=self.order.pk)
+        self.assertIsNotNone(cache.get(request.get_full_path()))
+        with self.assertNumQueries(0):
+            response = self.view(request, pk=self.order.pk)
+
+    def test_get_orders_cahed_miss(self):
+        request = self.factory.get(
+            reverse('orders:detail', kwargs={'pk': self.order.pk})
+        )
+        force_authenticate(request, user=self.admin)
+        cached_data = cache.get(
+            reverse('orders:detail', kwargs={'pk': self.order.pk})
+        )
+        self.assertIsNone(cached_data)
+        with self.assertNumQueries(3):
+            response = self.view(request, pk=self.order.pk)
+
 
     def test_patch_order_valid_status(self):
         data = {'status': 'processing'}
