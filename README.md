@@ -107,8 +107,14 @@
 
 ## Testing
 
+### inside the container / bash
  ```
  python manage.py test .
+ ```
+#### or
+### at the docker-compose.yaml file level, run the command:
+ ```
+ docker compose exec web python manage.py test .
  ```
 
 ### Screenshots 
