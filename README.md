@@ -1,6 +1,15 @@
 # StoreAPI
 
-#### Decisions:
+## Table of Contents
+
+- [Decisions](#decisions)
+- [Technologies](#technologies)
+- [Installation and start project](#installation-and-start-project)
+- [Endpoints](#endpoints)
+- [Testing](#testing)
+- [Screenshots](#screenshots)
+
+## Decisions:
 
 - *Приложения*: Создано четыре приложения. Одно из них `common` там лежат общие 
 инструменты: пагинация, права доступа и тестовые данные. Общая модель `BaseModel` 
@@ -54,14 +63,6 @@
 Папка `screenshots` включена для демонстрации работы 
 сервисов в `README.md`.
 
-
-## Table of Contents
-
-- [Technologies](#technologies)
-- [Installation and start project](#installation-and-start-project)
-- [Endpoints](#endpoints)
-- [Testing](#testing)
-- [Screenshots](#screenshots)
 
 ## Technologies
 
