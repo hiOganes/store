@@ -134,3 +134,13 @@
 <p align="center">
  <img width="1000px" src="https://raw.githubusercontent.com/hiOganes/store/main/screenshots/memcache.png" alt="qr"/>
 </p>
+
+
+## Table of Contents
+
+- [Decisions](#decisions)
+- [Technologies](#technologies)
+- [Installation and start project](#installation-and-start-project)
+- [Endpoints](#endpoints)
+- [Testing](#testing)
+- [Screenshots](#screenshots)
